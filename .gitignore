@@ -1,0 +1,12 @@
+#TempFile
+hsptmp
+obj
+*.ax
+packfile
+
+#BinaryFile
+*.exe
+*.dll
+
+#Other
+*.lnk
