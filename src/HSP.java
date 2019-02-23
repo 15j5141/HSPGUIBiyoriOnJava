@@ -2,11 +2,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntConsumer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,10 +31,12 @@ public class HSP extends JFrame{
 	int ginfo_r_, ginfo_g_, ginfo_b_;// "_"を内部用にしてついてないのは外から変更してもスルーするようにする？
 	private boolean isRedraw=true;
 	Font f;
-	List<Container> objects=new ArrayList<>();
+	List<JComponent> objects=new ArrayList<>();
+	List<JComponent> allObjects=new ArrayList<>();		//JLabel系も含む
 	int ginfo_mesx, ginfo_mesy;
 	private int objWidth=100;
 	private int objHeight=20;
+	public int stat;
 
 	public HSP(String title){
 		setTitle(title);								// ウィンドウタイトル設定
@@ -54,27 +60,15 @@ public class HSP extends JFrame{
 		this("Title");
 	}
 
-	public void changeWindowSize(int x, int y){
+	/*	public void changeWindowSize(int x, int y){
 		Width = x;
 		Height = y;
 		magnificationX = 0f + Width / OriginWidth;
 		magnificationY = 0f + Height / OriginHeight;
 		setBounds(getX(), getY(), Width, Height);
-	}
+	}*/
 
-	/*
-	 * Set, Add
-	 */
-	public void addGUI(){
-		//System.out.println(g.GetComponent("JLabel"));
-		//JLabel label = g.getJLabel();
-		int x, y;
-		int sizex=100, sizey=100;
-		//label.setBounds(x, y, sizex * (HSP.Width / HSP.OriginWidth), sizey * (HSP.Height / HSP.OriginHeight));
-		//jPanel.add(label);
-		contentPane.revalidate();
-	}
-	@Override
+	/*	@Override
 	public void repaint(){
 		contentPane.removeAll();
 		jPanel = new JPanel();
@@ -84,17 +78,10 @@ public class HSP extends JFrame{
 		super.revalidate();
 		super.repaint();
 	}
+	 */
 	/*
 	public void paint(Graphics g){
-		int sizeX = getSize().width;
-		int sizeY = getSize().height;
-		Image buffer = createImage(sizeX, sizeY);
-		Graphics gBuffer = buffer.getGraphics();
-		x+=10;
-		y+=10;
-		gBuffer.drawImage(image, x, y, this);
 		super.paint(g);
-		//g.drawImage(buffer, sizeX, sizeY, this);
 	}
 	 */
 	/// 画面描画命令
@@ -134,6 +121,9 @@ public class HSP extends JFrame{
 		// styleがまだ適当
 		f=new Font(name, style, size);
 	}
+	public void font(String string, int size) {
+		font(string, size, 0);
+	}
 	public void picload(String path) {//,x
 		//Image image = getToolkit().getImage("./image.png");
 		ImageIcon icon = new ImageIcon(path);
@@ -150,12 +140,30 @@ public class HSP extends JFrame{
 	public void title(String s) {
 		setTitle(s);
 	}
-	public void button(String s) {
+	private JButton button_(String s) {
 		JButton b = new JButton(s);
 		b.setBounds(ginfo_cx, ginfo_cy, objWidth, objHeight);
 		ginfo_cy+=objHeight;
 		jPanel.add(b);
-
+		objects.add(b);
+		stat=objects.indexOf(b);
+		return b;
+	}
+	public void button(String s, IntConsumer func) {
+		button_(s).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				func.accept(objects.indexOf(e.getSource()));
+			}
+		});
+	}
+	public void button(String s, Runnable func) {
+		button_(s).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				func.run();
+			}
+		});
 	}
 	public void objsize (int x, int y) {
 		objWidth=x;
@@ -193,13 +201,5 @@ public class HSP extends JFrame{
 	}
 	public void wait_(int a) {
 		await(a*10);
-	}
-	/*
-	 *
-	 * cls
-	 * button "",*(関数？)
-	 * */
-	public void font(String string, int i) {
-		font(string, i, 0);
 	}
 }
