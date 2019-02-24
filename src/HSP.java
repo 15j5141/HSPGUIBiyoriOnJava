@@ -2,8 +2,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntConsumer;
@@ -201,5 +205,37 @@ public class HSP extends JFrame{
 	}
 	public void wait_(int a) {
 		await(a*10);
+	}
+}
+class MyComponent extends JComponent {
+	private static final long serialVersionUID = 1L;
+	private int x1, y1, x2, y2;
+	enum Mode{Pset, Line, Boxf, Circle }
+	public Mode mode;
+	MyComponent(int x1, int y1, int x2, int y2){
+		super();
+		this.x1 =x1; this.y1 =y1;
+		this.x2 =x2; this.y2 =y2;
+	}
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		switch(mode) {
+		case Boxf:
+			break;
+		case Circle:
+			break;
+		case Pset:
+			break;
+		case Line:
+			break;
+		default:
+			break;
+		}
+	}
+	static int large(int a, int b) {
+		return a<b? b: a;
+	}
+	static int small(int a, int b) {
+		return a<b? a: b;
 	}
 }
