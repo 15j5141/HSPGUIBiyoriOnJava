@@ -27,7 +27,7 @@ public class HSP extends JFrame{
 	private Container contentPane;
 	private JPanel jPanel;
 	public int ginfo_cx=0, ginfo_cy=0;
-	public int ginfo_winx = 800;
+	public int ginfo_winx = 800, ginfo_winy=600;
 	public int ginfo_r, ginfo_g, ginfo_b;
 	int ginfo_r_, ginfo_g_, ginfo_b_;// "_"を内部用にしてついてないのは外から変更してもスルーするようにする？
 	private boolean isRedraw=true;
@@ -205,7 +205,7 @@ public class HSP extends JFrame{
 	}
 	public void line(int x1, int y1, int x2, int y2) {
 		MyComponent l=MyComponent.NewLine(x1, y1, x2, y2);// 線描画用インスタンス生成
-		l.setBounds(0, 0, MyComponent.large(x1, x2), MyComponent.large(y1, y2));
+		l.setBounds(jPanel.getBounds());
 		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
 		jPanel.add(l);
 		redraw();// 強制再描画
@@ -224,7 +224,6 @@ class MyComponent extends JComponent {
 	public static MyComponent NewLine(int x1, int y1, int x2, int y2) {
 		MyComponent mc = new MyComponent(x1, y1, x2, y2);
 		mc.mode=Mode.Line;
-		System.out.println("b");
 		return mc;
 	}
 	public void paintComponent(Graphics g) {
