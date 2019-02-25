@@ -226,10 +226,16 @@ class MyComponent extends JComponent {
 		mc.mode=Mode.Line;
 		return mc;
 	}
+	public static MyComponent NewBoxf(int x1, int y1, int x2, int y2) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=Mode.Boxf;
+		return mc;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		switch(mode) {
 		case Boxf:
+			g.fillRect(x1, y1, x2, y2);
 			break;
 		case Circle:
 			break;
