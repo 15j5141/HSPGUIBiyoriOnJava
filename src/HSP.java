@@ -3,11 +3,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntConsumer;
@@ -206,6 +203,13 @@ public class HSP extends JFrame{
 	public void wait_(int a) {
 		await(a*10);
 	}
+	public void line(int x1, int y1, int x2, int y2) {
+		MyComponent l=MyComponent.NewLine(x1, y1, x2, y2);// 線描画用インスタンス生成
+		l.setBounds(0, 0, MyComponent.large(x1, x2), MyComponent.large(y1, y2));
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
 }
 class MyComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
@@ -233,7 +237,7 @@ class MyComponent extends JComponent {
 		case Pset:
 			break;
 		case Line:
-			g.drawLine(small(0, x2-x1), small(0, y2-y1), large(0, x2-x1), large(0, y2-y1));
+			g.drawLine(x1, y1, x2, y2);
 			break;
 		default:
 			break;
