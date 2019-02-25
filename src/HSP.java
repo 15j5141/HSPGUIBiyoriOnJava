@@ -227,6 +227,16 @@ public class HSP extends JFrame{
 	public void boxf() {
 		boxf(null, null, null, null);
 	}
+	public void circle(Integer x1, Integer y1, Integer x2, Integer y2, Integer mode) {
+		MyComponent l=MyComponent.NewCircle(x1==null?0:x1, y1==null?0:y1, x2==null?jPanel.getWidth():x2, y2==null?jPanel.getHeight():y2, mode==null?true:(mode!=0));// modeが0以外は全部trueを渡す.
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
+	public void circle() {
+		circle(null,null,null,null,null);
+	}
 }
 class MyComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
