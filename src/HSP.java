@@ -210,6 +210,13 @@ public class HSP extends JFrame{
 		jPanel.add(l);
 		redraw();// 強制再描画
 	}
+	public void pset(int x, int y) {
+		MyComponent l=MyComponent.NewLine(x, y, x, y);// 線描画用インスタンス生成
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
 	public void boxf(Integer x1, Integer y1, Integer x2, Integer y2) {
 		MyComponent l=MyComponent.NewBoxf(x1==null?0:x1, y1==null?0:y1, x2==null?jPanel.getWidth():x2, y2==null?jPanel.getHeight():y2);// 値省略で自働割当
 		l.setBounds(jPanel.getBounds());
@@ -236,6 +243,11 @@ class MyComponent extends JComponent {
 		mc.mode=Mode.Line;
 		return mc;
 	}
+	public static MyComponent NewPset(int x1, int y1) {
+		MyComponent mc = new MyComponent(x1, y1, x1, y1);
+		mc.mode=Mode.Pset;
+		return mc;
+	}
 	public static MyComponent NewBoxf(int x1, int y1, int x2, int y2) {
 		MyComponent mc = new MyComponent(x1, y1, x2, y2);
 		mc.mode=Mode.Boxf;
@@ -250,6 +262,7 @@ class MyComponent extends JComponent {
 		case Circle:
 			break;
 		case Pset:
+			g.drawLine(x1, y1, x1, y1);
 			break;
 		case Line:
 			g.drawLine(x1, y1, x2, y2);
