@@ -235,7 +235,7 @@ class MyComponent extends JComponent {
 		super.paintComponent(g);
 		switch(mode) {
 		case Boxf:
-			g.fillRect(x1, y1, x2, y2);
+			g.fillRect(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
 			break;
 		case Circle:
 			break;
