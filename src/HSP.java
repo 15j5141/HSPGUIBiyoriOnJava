@@ -231,7 +231,7 @@ public class HSP extends JFrame{
 class MyComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private int x1, y1, x2, y2;
-	enum Mode{Pset, Line, Boxf, Circle }
+	enum Mode{Pset, Line, Boxf, Circle, FillCircle }
 	public Mode mode;
 	MyComponent(int x1, int y1, int x2, int y2){
 		super();
@@ -253,6 +253,11 @@ class MyComponent extends JComponent {
 		mc.mode=Mode.Boxf;
 		return mc;
 	}
+	public static MyComponent NewCircle(int x1, int y1, int x2, int y2, boolean isFill) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=isFill?Mode.FillCircle:Mode.Circle;
+		return mc;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		switch(mode) {
@@ -260,6 +265,10 @@ class MyComponent extends JComponent {
 			g.fillRect(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
 			break;
 		case Circle:
+			g.drawOval(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
+			break;
+		case FillCircle:
+			g.fillOval(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
 			break;
 		case Pset:
 			g.drawLine(x1, y1, x1, y1);
