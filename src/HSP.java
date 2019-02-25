@@ -3,11 +3,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntConsumer;
@@ -30,7 +27,7 @@ public class HSP extends JFrame{
 	private Container contentPane;
 	private JPanel jPanel;
 	public int ginfo_cx=0, ginfo_cy=0;
-	public int ginfo_winx = 800;
+	public int ginfo_winx = 800, ginfo_winy=600;
 	public int ginfo_r, ginfo_g, ginfo_b;
 	int ginfo_r_, ginfo_g_, ginfo_b_;// "_"を内部用にしてついてないのは外から変更してもスルーするようにする？
 	private boolean isRedraw=true;
@@ -206,6 +203,13 @@ public class HSP extends JFrame{
 	public void wait_(int a) {
 		await(a*10);
 	}
+	public void line(int x1, int y1, int x2, int y2) {
+		MyComponent l=MyComponent.NewLine(x1, y1, x2, y2);// 線描画用インスタンス生成
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
 }
 class MyComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
@@ -217,6 +221,11 @@ class MyComponent extends JComponent {
 		this.x1 =x1; this.y1 =y1;
 		this.x2 =x2; this.y2 =y2;
 	}
+	public static MyComponent NewLine(int x1, int y1, int x2, int y2) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=Mode.Line;
+		return mc;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		switch(mode) {
@@ -227,6 +236,7 @@ class MyComponent extends JComponent {
 		case Pset:
 			break;
 		case Line:
+			g.drawLine(x1, y1, x2, y2);
 			break;
 		default:
 			break;
