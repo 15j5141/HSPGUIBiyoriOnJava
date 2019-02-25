@@ -226,6 +226,11 @@ class MyComponent extends JComponent {
 		mc.mode=Mode.Line;
 		return mc;
 	}
+	public static MyComponent NewPset(int x1, int y1) {
+		MyComponent mc = new MyComponent(x1, y1, x1, y1);
+		mc.mode=Mode.Pset;
+		return mc;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		switch(mode) {
@@ -234,6 +239,7 @@ class MyComponent extends JComponent {
 		case Circle:
 			break;
 		case Pset:
+			g.drawLine(x1, y1, x1, y1);
 			break;
 		case Line:
 			g.drawLine(x1, y1, x2, y2);
