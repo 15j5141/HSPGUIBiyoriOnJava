@@ -210,6 +210,13 @@ public class HSP extends JFrame{
 		jPanel.add(l);
 		redraw();// 強制再描画
 	}
+	public void pset(int x, int y) {
+		MyComponent l=MyComponent.NewLine(x, y, x, y);// 線描画用インスタンス生成
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
 }
 class MyComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
