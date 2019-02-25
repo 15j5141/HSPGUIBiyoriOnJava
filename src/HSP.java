@@ -227,11 +227,21 @@ public class HSP extends JFrame{
 	public void boxf() {
 		boxf(null, null, null, null);
 	}
+	public void circle(Integer x1, Integer y1, Integer x2, Integer y2, Integer mode) {
+		MyComponent l=MyComponent.NewCircle(x1==null?0:x1, y1==null?0:y1, x2==null?jPanel.getWidth():x2, y2==null?jPanel.getHeight():y2, mode==null?true:(mode!=0));// modeが0以外は全部trueを渡す.
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
+	public void circle() {
+		circle(null,null,null,null,null);
+	}
 }
 class MyComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private int x1, y1, x2, y2;
-	enum Mode{Pset, Line, Boxf, Circle }
+	enum Mode{Pset, Line, Boxf, Circle, FillCircle }
 	public Mode mode;
 	MyComponent(int x1, int y1, int x2, int y2){
 		super();
@@ -253,6 +263,11 @@ class MyComponent extends JComponent {
 		mc.mode=Mode.Boxf;
 		return mc;
 	}
+	public static MyComponent NewCircle(int x1, int y1, int x2, int y2, boolean isFill) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=isFill?Mode.FillCircle:Mode.Circle;
+		return mc;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		switch(mode) {
@@ -260,6 +275,10 @@ class MyComponent extends JComponent {
 			g.fillRect(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
 			break;
 		case Circle:
+			g.drawOval(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
+			break;
+		case FillCircle:
+			g.fillOval(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
 			break;
 		case Pset:
 			g.drawLine(x1, y1, x1, y1);
