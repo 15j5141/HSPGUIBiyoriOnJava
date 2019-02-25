@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class HSP extends JFrame{
 	private Container contentPane;
 	private JPanel jPanel;
 	public int ginfo_cx=0, ginfo_cy=0;
-	public int ginfo_winx = 800;
+	public int ginfo_winx = 800, ginfo_winy=600;
 	public int ginfo_r, ginfo_g, ginfo_b;
 	int ginfo_r_, ginfo_g_, ginfo_b_;// "_"を内部用にしてついてないのは外から変更してもスルーするようにする？
 	private boolean isRedraw=true;
@@ -201,5 +202,98 @@ public class HSP extends JFrame{
 	}
 	public void wait_(int a) {
 		await(a*10);
+	}
+	public void line(int x1, int y1, int x2, int y2) {
+		MyComponent l=MyComponent.NewLine(x1, y1, x2, y2);// 線描画用インスタンス生成
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
+	public void pset(int x, int y) {
+		MyComponent l=MyComponent.NewLine(x, y, x, y);// 線描画用インスタンス生成
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
+	public void boxf(Integer x1, Integer y1, Integer x2, Integer y2) {
+		MyComponent l=MyComponent.NewBoxf(x1==null?0:x1, y1==null?0:y1, x2==null?jPanel.getWidth():x2, y2==null?jPanel.getHeight():y2);// 値省略で自働割当
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
+	public void boxf() {
+		boxf(null, null, null, null);
+	}
+	public void circle(Integer x1, Integer y1, Integer x2, Integer y2, Integer mode) {
+		MyComponent l=MyComponent.NewCircle(x1==null?0:x1, y1==null?0:y1, x2==null?jPanel.getWidth():x2, y2==null?jPanel.getHeight():y2, mode==null?true:(mode!=0));// modeが0以外は全部trueを渡す.
+		l.setBounds(jPanel.getBounds());
+		l.setForeground(new Color(ginfo_r, ginfo_g, ginfo_b));
+		jPanel.add(l);
+		redraw();// 強制再描画
+	}
+	public void circle() {
+		circle(null,null,null,null,null);
+	}
+}
+class MyComponent extends JComponent {
+	private static final long serialVersionUID = 1L;
+	private int x1, y1, x2, y2;
+	enum Mode{Pset, Line, Boxf, Circle, FillCircle }
+	public Mode mode;
+	MyComponent(int x1, int y1, int x2, int y2){
+		super();
+		this.x1 =x1; this.y1 =y1;
+		this.x2 =x2; this.y2 =y2;
+	}
+	public static MyComponent NewLine(int x1, int y1, int x2, int y2) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=Mode.Line;
+		return mc;
+	}
+	public static MyComponent NewPset(int x1, int y1) {
+		MyComponent mc = new MyComponent(x1, y1, x1, y1);
+		mc.mode=Mode.Pset;
+		return mc;
+	}
+	public static MyComponent NewBoxf(int x1, int y1, int x2, int y2) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=Mode.Boxf;
+		return mc;
+	}
+	public static MyComponent NewCircle(int x1, int y1, int x2, int y2, boolean isFill) {
+		MyComponent mc = new MyComponent(x1, y1, x2, y2);
+		mc.mode=isFill?Mode.FillCircle:Mode.Circle;
+		return mc;
+	}
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		switch(mode) {
+		case Boxf:
+			g.fillRect(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
+			break;
+		case Circle:
+			g.drawOval(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
+			break;
+		case FillCircle:
+			g.fillOval(small(x1,x2), small(y1,y2), Math.abs(x2-x1)+1, Math.abs(y2-y1)+1);
+			break;
+		case Pset:
+			g.drawLine(x1, y1, x1, y1);
+			break;
+		case Line:
+			g.drawLine(x1, y1, x2, y2);
+			break;
+		default:
+			break;
+		}
+	}
+	static int large(int a, int b) {
+		return a<b? b: a;
+	}
+	static int small(int a, int b) {
+		return a<b? a: b;
 	}
 }
